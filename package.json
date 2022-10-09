@@ -1,0 +1,18 @@
+{
+  "name": "oko-zadanie-2",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsnd --respawn src/app.ts",
+    "test:repository": "jest src/repositories/transactionsRepository.spec.ts --watch",
+    "test:service": "jest src/services/transactionsService.spec.ts --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.9.0"
+  }
+}

@@ -24,9 +24,9 @@ Wymagane body requestu:
 - `date`: data, musi być w dowolnym formacie zgodnym z [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601 "ISO 8601"), inaczej aplikacja zwróci error, ponieważ nie przejdzie walidacji.
 - `status`: boolean.
 
-### Kilka notatek
+## Kilka notatek
 
-- Appka jest silnie otypowana, bo fajnie jest wtedy.
+- Appka jest silnie otypowana, bo to ułatwia życie przy skalowaniu.
 - Napisałem własny, bardzo prosty walidator, można go podejrzeć [tutaj](https://github.com/matt-jb/oko/blob/master/src/utils/Validator.ts "tutaj"). Starałem się wymyślić jak najwięcej edge-cases, które są pokryte.
 - Zgodnie z poleceniami przetestowane są Service oraz Repository. Żeby pokrycie testów było 100%, trzeba by oczywiście przetestować jeszcze utilsy.
 - Helpery zawierają dwie globalne stałe.

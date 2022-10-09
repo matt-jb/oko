@@ -28,4 +28,5 @@ Wymagane body requestu:
 
 - Appka jest silnie otypowana, bo fajnie jest wtedy.
 - Napisałem własny, bardzo prosty walidator, można go podejrzeć [tutaj](https://github.com/matt-jb/oko/blob/master/src/utils/Validator.ts "tutaj"). Starałem się wymyślić jak najwięcej edge-cases, które są pokryte.
+- Zgodnie z poleceniami przetestowane są Service oraz Repository. Żeby pokrycie testów było 100%, trzeba by oczywiście przetestować jeszcze utilsy.
 - Helpery zawierają dwie globalne stałe.

@@ -4,20 +4,16 @@ import {
   formatTransactions,
   paginateArray,
 } from "../utils/helpers";
-import fs from "fs";
-import { promisify } from "util";
+import fs from "fs/promises";
 import { HttpError } from "routing-controllers";
-
-const readFileAsync = promisify(fs.readFile);
-const appendFileAsync = promisify(fs.appendFile);
 
 export class TransactionsRepository implements ITransactionsRepository {
   public async getAllTransactions() {
-    const transactionString = await readFileAsync(CSV_DB_PATH, "utf8").catch(
-      (err) => {
+    const transactionString = await fs
+      .readFile(CSV_DB_PATH, "utf8")
+      .catch((err) => {
         throw new HttpError(500, `Error reading CSV file: ${err.message}`);
-      }
-    );
+      });
     return formatTransactions(transactionString);
   }
 
@@ -32,9 +28,9 @@ export class TransactionsRepository implements ITransactionsRepository {
     const isTaken =
       allTransactions.findIndex((el) => el.id === id) === -1 ? false : true;
 
-    if (isTaken) throw new HttpError(403, `ID ${id} already exists.`);
+    if (isTaken) throw new HttpError(403, `ID ${id} already exists`);
 
-    appendFileAsync(CSV_DB_PATH, `\r\n${id},${date.toISOString()}`).catch(
+    fs.appendFile(CSV_DB_PATH, `\r\n${id},${date.toISOString()}`).catch(
       (err) => {
         throw new HttpError(500, `Error writing CSV file: ${err.message}`);
       }
@@ -49,7 +45,7 @@ export class TransactionsRepository implements ITransactionsRepository {
     const Idx = allTransactions.findIndex((el) => el.id === id);
 
     if (Idx === -1)
-      throw new HttpError(404, `Transaction with the id of ${id} not found.`);
+      throw new HttpError(404, `Transaction with the id of ${id} not found`);
 
     return allTransactions[Idx];
   }

@@ -28,10 +28,10 @@ export class TransactionsService implements ITransactionsService {
     const lastPage = Math.floor((length - 1) / ENTRIES_PER_PAGE);
 
     if (page > lastPage)
-      throw new HttpError(400, `The last page is ${lastPage}.`);
+      throw new HttpError(400, `The last page is ${lastPage}`);
 
     if (page < 0 || data.length === 0)
-      throw new HttpError(400, `Invalid page number.`);
+      throw new HttpError(400, `Invalid page number`);
 
     return {
       page,

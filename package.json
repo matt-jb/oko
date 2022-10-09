@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "tsnd --files --respawn src/app.ts",
-    "test:repo": "jest src/repositories/transactionsRepository.test.ts --watch",
-    "test:service": "jest src/services/transactionsService.test.ts --watch"
+    "test:repo": "jest src/repositories/TransactionsRepository.test.ts --watch",
+    "test:service": "jest src/services/TransactionsService.test.ts --watch"
   },
   "author": "",
   "license": "ISC",

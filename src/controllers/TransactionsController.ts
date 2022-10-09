@@ -1,9 +1,7 @@
-import { JsonController, Get, Param, Post, Req } from "routing-controllers";
+import { JsonController, Get, Param, Post, Body } from "routing-controllers";
 import { TransactionsRepository } from "../repositories/TransactionsRepository";
 import { TransactionsService } from "../services/TransactionsService";
-
-const transactionsRepository = new TransactionsRepository();
-const transactionsService = new TransactionsService({ transactionsRepository });
+import { ITransactionBody } from "../types";
 
 @JsonController()
 export class TransactionsController {
@@ -13,12 +11,20 @@ export class TransactionsController {
   }
 
   @Get("/transactions/page/:page")
-  getPage(@Param("page") page: number) {
-    return transactionsService.getPaginatedTransactions(page);
+  getPage(@Param("page") page: string) {
+    return transactionsService.getPaginatedTransactions(parseInt(page));
   }
 
-  // @Post("/users")
-  // post(@Req() request: Request) {
-  //   logic goes here
-  // }
+  @Get("/transaction/:id")
+  getById(@Param("id") id: string) {
+    return transactionsService.getSingleTransaction(id);
+  }
+
+  @Post("/transaction")
+  postTransaction(@Body() query: ITransactionBody) {
+    return transactionsService.addTransaction(query);
+  }
 }
+
+const transactionsRepository = new TransactionsRepository();
+const transactionsService = new TransactionsService({ transactionsRepository });

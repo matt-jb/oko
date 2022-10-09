@@ -1,8 +1,8 @@
-import { HttpError } from "routing-controllers";
-
 export interface ITransactionsRepository {
   getAllTransactions(): Promise<ITransaction[]>;
   getPaginatedTransactions(page: number): Promise<IPageInfo>;
+  addTransaction(id: string, date: Date): Promise<ITransaction>;
+  getSingleTransaction(id: string): Promise<ITransaction>;
 }
 
 export interface ITransactionsRepositoryOptions {
@@ -11,7 +11,9 @@ export interface ITransactionsRepositoryOptions {
 
 export interface ITransactionsService {
   getAllTransactions(): Promise<ITransaction[]>;
-  getPaginatedTransactions(page: number): Promise<IPage | HttpError>;
+  getPaginatedTransactions(page: number): Promise<IPage>;
+  addTransaction(query: ITransactionBody): Promise<ITransactionSuccessResponse>;
+  getSingleTransaction(id: string): Promise<ITransactionSuccessResponse>;
 }
 
 export interface ITransactionsServiceOptions {
@@ -20,7 +22,12 @@ export interface ITransactionsServiceOptions {
 
 export interface ITransaction {
   id: string;
-  date: string;
+  date: string | Date;
+}
+
+export interface ITransactionSuccessResponse {
+  success: boolean;
+  data: ITransaction;
 }
 
 export interface IPageInfo {
@@ -34,7 +41,8 @@ export interface IPage {
   data: ITransaction[];
 }
 
-export interface IPaginateArraySettings {
-  pageIdx: number;
-  entriesPerPage: number;
+export interface ITransactionBody {
+  id: string;
+  date: string;
+  status: boolean;
 }

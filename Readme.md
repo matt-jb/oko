@@ -18,11 +18,19 @@ Zwraca pojedynczą transakcję. Nie było tego w poleceniu, ale taki route w pra
 **POST** `/transaction`
 Dodaje pojedynczą transakcję i zapisuje do pliku CSV. W odpowiedzi zwraca dodane dane.
 
-Wymagane body requestu:
+Wymagane body requestu (raw JSON):
 
 - `id`: dowolny string. Appka zwróci błąd, jeżeli dane ID już będzie istniało.
-- `date`: data, musi być w dowolnym formacie zgodnym z [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601 "ISO 8601"), inaczej aplikacja zwróci error, ponieważ nie przejdzie walidacji.
+- `date`: data, musi być stringiem w dowolnym formacie zgodnym z [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601 "ISO 8601"), inaczej aplikacja zwróci error, ponieważ nie przejdzie walidacji.
 - `status`: boolean.
+
+Przykładowe poprawne body requestu:
+
+`{
+    "id": "1234",
+    "date": "2021-12-30T22:32:03.486Z",
+    "status": true
+}`
 
 ## Kilka notatek
 

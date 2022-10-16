@@ -2,17 +2,17 @@ import { HttpError } from "routing-controllers";
 import {
   ITransactionBody,
   ITransactionsRepository,
-  ITransactionsRepositoryOptions,
   ITransactionsService,
 } from "../types";
 import { ENTRIES_PER_PAGE, getExpirationDate } from "../utils/helpers";
 import Validator from "../utils/Validator";
+import TransactionsRepository from "../repositories/TransactionsRepository";
 
-export class TransactionsService implements ITransactionsService {
+class TransactionsService implements ITransactionsService {
   private readonly _transRepo: ITransactionsRepository;
 
-  constructor({ transactionsRepository }: ITransactionsRepositoryOptions) {
-    this._transRepo = transactionsRepository;
+  constructor(TransactionsRepository: ITransactionsRepository) {
+    this._transRepo = TransactionsRepository;
   }
 
   public async getAllTransactions() {
@@ -68,3 +68,5 @@ export class TransactionsService implements ITransactionsService {
     };
   }
 }
+
+export default new TransactionsService(TransactionsRepository);

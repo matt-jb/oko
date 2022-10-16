@@ -7,7 +7,7 @@ import {
 import fs from "fs/promises";
 import { HttpError } from "routing-controllers";
 
-export class TransactionsRepository implements ITransactionsRepository {
+class TransactionsRepository implements ITransactionsRepository {
   public async getAllTransactions() {
     const transactionString = await fs
       .readFile(CSV_DB_PATH, "utf8")
@@ -50,3 +50,5 @@ export class TransactionsRepository implements ITransactionsRepository {
     return allTransactions[Idx];
   }
 }
+
+export default new TransactionsRepository();

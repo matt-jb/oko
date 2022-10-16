@@ -5,19 +5,11 @@ export interface ITransactionsRepository {
   getSingleTransaction(id: string): Promise<ITransaction>;
 }
 
-export interface ITransactionsRepositoryOptions {
-  transactionsRepository: ITransactionsRepository;
-}
-
 export interface ITransactionsService {
   getAllTransactions(): Promise<ITransaction[]>;
   getPaginatedTransactions(page: number): Promise<IPage>;
   addTransaction(query: ITransactionBody): Promise<ITransactionSuccessResponse>;
   getSingleTransaction(id: string): Promise<ITransactionSuccessResponse>;
-}
-
-export interface ITransactionsServiceOptions {
-  transactionsService: ITransactionsService;
 }
 
 export interface ITransaction {

@@ -25,9 +25,8 @@ class TransactionsRepository implements ITransactionsRepository {
 
   public async addTransaction(id: string, date: Date) {
     const allTransactions = await this.getAllTransactions();
-    const isTaken =
-      allTransactions.findIndex((el) => el.id === id) === -1 ? false : true;
 
+    const isTaken = allTransactions.findIndex((el) => el.id === id) !== -1;
     if (isTaken) throw new HttpError(403, `ID ${id} already exists`);
 
     fs.appendFile(CSV_DB_PATH, `\r\n${id},${date.toISOString()}`).catch(

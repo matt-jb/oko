@@ -6,15 +6,14 @@ import {
   mockPaginatedServiceTransactions,
   mockReadFile,
 } from "../utils/testUtils";
-import { TransactionsRepository } from "../repositories/TransactionsRepository";
-import { TransactionsService } from "./TransactionsService";
+import TransactionsService from "./TransactionsService";
 
 jest.spyOn(fs, "readFile").mockImplementation(mockReadFile);
 jest.spyOn(fs, "appendFile").mockImplementation(mockAppendFile);
 
 describe("Service works as expected", () => {
   it("Retrieves all data", async () => {
-    const res = await transactionsService.getAllTransactions();
+    const res = await TransactionsService.getAllTransactions();
     const expectedLength = 9;
 
     expect(res.length).toBe(expectedLength);
@@ -22,7 +21,7 @@ describe("Service works as expected", () => {
   });
 
   it("Retrieves paginated data", async () => {
-    const pageZero = await transactionsService.getPaginatedTransactions(0);
+    const pageZero = await TransactionsService.getPaginatedTransactions(0);
     const expectedPageZeroLength = 5;
     const expectedLastPage = 1;
 
@@ -30,7 +29,7 @@ describe("Service works as expected", () => {
     expect(pageZero.lastPage).toBe(expectedLastPage);
     expect(pageZero).toEqual(mockPaginatedServiceTransactions);
 
-    const pageOne = await transactionsService.getPaginatedTransactions(1);
+    const pageOne = await TransactionsService.getPaginatedTransactions(1);
     const expectedPageOneLength = 4;
 
     expect(pageOne.data.length).toBe(expectedPageOneLength);
@@ -42,7 +41,7 @@ describe("Service works as expected", () => {
     const dateInOneMonth = "2016-08-17T21:44:57.876Z";
     const status = true;
 
-    const transaction = await transactionsService.addTransaction({
+    const transaction = await TransactionsService.addTransaction({
       id,
       date,
       status,
@@ -56,7 +55,7 @@ describe("Service works as expected", () => {
   it("Returns single transaction", async () => {
     const { id, date } = mockAllServiceTransactions[0];
 
-    const transaction = await transactionsService.getSingleTransaction(id);
+    const transaction = await TransactionsService.getSingleTransaction(id);
 
     expect(transaction.success).toBe(true);
     expect(transaction.data).toEqual({ id, date });
@@ -69,27 +68,27 @@ describe("Every method returns the correct errors", () => {
     const date = "2016-07-17T21:44:57.876Z";
     const status = true;
 
-    await transactionsService
-      .addTransaction({ id, date, status })
-      .catch((error) => {
+    await TransactionsService.addTransaction({ id, date, status }).catch(
+      (error) => {
         expect(error).toBeInstanceOf(HttpError);
         expect(error).toHaveProperty("httpCode", 403);
         expect(error.message).toBe(`ID ${id} already exists`);
-      });
+      }
+    );
   });
 
   test("getSingleTransaction errors", async () => {
     const nonExistantId = "foo";
 
-    await transactionsService
-      .getSingleTransaction(nonExistantId)
-      .catch((error) => {
+    await TransactionsService.getSingleTransaction(nonExistantId).catch(
+      (error) => {
         expect(error).toBeInstanceOf(HttpError);
         expect(error).toHaveProperty("httpCode", 404);
         expect(error.message).toBe(
           `Transaction with the id of ${nonExistantId} not found`
         );
-      });
+      }
+    );
   });
 
   test("getPaginatedTransactions errors", async () => {
@@ -97,23 +96,20 @@ describe("Every method returns the correct errors", () => {
     const invalidPage = -1;
     const actualLastPage = 1;
 
-    await transactionsService
-      .getPaginatedTransactions(nonExistantPage)
-      .catch((error) => {
+    await TransactionsService.getPaginatedTransactions(nonExistantPage).catch(
+      (error) => {
         expect(error).toBeInstanceOf(HttpError);
         expect(error).toHaveProperty("httpCode", 400);
         expect(error.message).toBe(`The last page is ${actualLastPage}`);
-      });
+      }
+    );
 
-    await transactionsService
-      .getPaginatedTransactions(invalidPage)
-      .catch((error) => {
+    await TransactionsService.getPaginatedTransactions(invalidPage).catch(
+      (error) => {
         expect(error).toBeInstanceOf(HttpError);
         expect(error).toHaveProperty("httpCode", 400);
         expect(error.message).toBe(`Invalid page number`);
-      });
+      }
+    );
   });
 });
-
-const transactionsRepository = new TransactionsRepository();
-const transactionsService = new TransactionsService({ transactionsRepository });

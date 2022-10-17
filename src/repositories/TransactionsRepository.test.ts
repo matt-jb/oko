@@ -6,14 +6,14 @@ import {
   mockPaginatedRepoTransactions,
   mockAppendFile,
 } from "../utils/testUtils";
-import { TransactionsRepository } from "./TransactionsRepository";
+import TransactionsRepository from "./TransactionsRepository";
 
 jest.spyOn(fs, "readFile").mockImplementation(mockReadFile);
 jest.spyOn(fs, "appendFile").mockImplementation(mockAppendFile);
 
 describe("Repository works as expected", () => {
   it("Retrieves all data", async () => {
-    const res = await transactionsRepository.getAllTransactions();
+    const res = await TransactionsRepository.getAllTransactions();
     const expectedLength = 9;
 
     expect(res.length).toBe(expectedLength);
@@ -21,7 +21,7 @@ describe("Repository works as expected", () => {
   });
 
   it("Retrieves paginated data", async () => {
-    const pageZero = await transactionsRepository.getPaginatedTransactions(0);
+    const pageZero = await TransactionsRepository.getPaginatedTransactions(0);
 
     const expectedLength = 9;
     const expectedPageZeroLength = 5;
@@ -30,7 +30,7 @@ describe("Repository works as expected", () => {
     expect(pageZero.data.length).toBe(expectedPageZeroLength);
     expect(pageZero).toEqual(mockPaginatedRepoTransactions);
 
-    const pageOne = await transactionsRepository.getPaginatedTransactions(1);
+    const pageOne = await TransactionsRepository.getPaginatedTransactions(1);
     const expectedPageOneLength = 4;
 
     expect(pageOne.length).toBe(expectedLength);
@@ -41,7 +41,7 @@ describe("Repository works as expected", () => {
     const id = "123";
     const date = new Date();
 
-    const transaction = await transactionsRepository.addTransaction(id, date);
+    const transaction = await TransactionsRepository.addTransaction(id, date);
 
     expect(transaction.id).toBe(id);
     expect(transaction.date).toBe(date);
@@ -50,7 +50,7 @@ describe("Repository works as expected", () => {
   it("Returns single transaction", async () => {
     const { id, date } = mockAllRepoTransactions[0];
 
-    const transaction = await transactionsRepository.getSingleTransaction(id);
+    const transaction = await TransactionsRepository.getSingleTransaction(id);
 
     expect(transaction.id).toBe(id);
     expect(transaction.date).toBe(date);
@@ -61,22 +61,20 @@ describe("Repository works as expected", () => {
     const date = new Date();
     const nonExistantId = "foo";
 
-    await transactionsRepository.addTransaction(id, date).catch((error) => {
+    await TransactionsRepository.addTransaction(id, date).catch((error) => {
       expect(error).toBeInstanceOf(HttpError);
       expect(error).toHaveProperty("httpCode", 403);
       expect(error.message).toBe(`ID ${id} already exists`);
     });
 
-    await transactionsRepository
-      .getSingleTransaction(nonExistantId)
-      .catch((error) => {
+    await TransactionsRepository.getSingleTransaction(nonExistantId).catch(
+      (error) => {
         expect(error).toBeInstanceOf(HttpError);
         expect(error).toHaveProperty("httpCode", 404);
         expect(error.message).toBe(
           `Transaction with the id of ${nonExistantId} not found`
         );
-      });
+      }
+    );
   });
 });
-
-const transactionsRepository = new TransactionsRepository();
